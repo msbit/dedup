@@ -51,6 +51,13 @@ all_hashes = hash_all_files(files)
 duplicate_hashes = all_hashes.select { |_k, v| v.size > 1 }
 unique_hashes = all_hashes.select { |_k, v| v.size == 1 }
 
+saveable_size = duplicate_hashes.reduce(0) do |memo, value|
+  _digest, files = value
+  memo + ((files.size - 1) * File.size(files.first))
+end
+
+puts "Could save #{saveable_size} bytes"
+
 File.open("dedup.#{execution_time}.all.json", 'w') { |f| f.write(JSON.pretty_generate(all_hashes)) }
 File.open("dedup.#{execution_time}.duplicate.json", 'w') { |f| f.write(JSON.pretty_generate(duplicate_hashes)) }
 File.open("dedup.#{execution_time}.unique.json", 'w') { |f| f.write(JSON.pretty_generate(unique_hashes)) }
