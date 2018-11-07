@@ -35,6 +35,8 @@ def hash_all_files(files)
   hashes
 end
 
+execution_time = Time.now.to_i
+
 ARGV << '.' if ARGV.empty?
 
 files = get_all_files(ARGV)
@@ -43,6 +45,6 @@ all_hashes = hash_all_files(files)
 duplicate_hashes = all_hashes.select { |_k, v| v.size > 1 }
 unique_hashes = all_hashes.select { |_k, v| v.size == 1 }
 
-File.open('dedup.all.json', 'w') { |f| f.write(JSON.pretty_generate(all_hashes)) }
-File.open('dedup.duplicate.json', 'w') { |f| f.write(JSON.pretty_generate(duplicate_hashes)) }
-File.open('dedup.unique.json', 'w') { |f| f.write(JSON.pretty_generate(unique_hashes)) }
+File.open("dedup.#{execution_time}.all.json", 'w') { |f| f.write(JSON.pretty_generate(all_hashes)) }
+File.open("dedup.#{execution_time}.duplicate.json", 'w') { |f| f.write(JSON.pretty_generate(duplicate_hashes)) }
+File.open("dedup.#{execution_time}.unique.json", 'w') { |f| f.write(JSON.pretty_generate(unique_hashes)) }
