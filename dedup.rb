@@ -22,8 +22,12 @@ end
 def hash_all_files(files)
   hashes = {}
 
+  total = files.reduce(0) do |memo, file|
+    memo + File.size(file)
+  end
+
   puts 'Hashing files...'
-  progress_bar = ProgressBar.create(total: files.size)
+  progress_bar = ProgressBar.create(total: total)
 
   files.each_with_index do |file, _i|
     digest = Digest::SHA1.file(file).to_s
@@ -31,7 +35,7 @@ def hash_all_files(files)
       hashes[digest] = [] unless hashes.key?(digest)
       hashes[digest] << file
     end
-    progress_bar.increment
+    progress_bar.progress += File.size(file)
   end
 
   hashes
