@@ -10,12 +10,11 @@ def get_all_files(base_paths)
   puts 'Generating file list...'
   progress_bar = ProgressBar.create(total: base_paths.size)
 
-  all_files = base_paths.map { |p| File.absolute_path(p) }.map do |base_path|
+  base_paths.map { |p| File.absolute_path(p) }.map do |base_path|
     files = Dir.glob("#{base_path}/**/{*,.*}").select { |p| File.file?(p) }
     progress_bar.increment
     files
-  end
-  all_files.flatten!
+  end.flatten
 end
 
 def hash_all_files(files)
