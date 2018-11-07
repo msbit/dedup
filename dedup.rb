@@ -14,7 +14,9 @@ def get_all_files(base_paths)
     files = Dir.glob("#{base_path}/**/{*,.*}").select { |p| File.file?(p) }
     progress_bar.increment
     files
-  end.flatten
+  end.flatten.uniq.sort do |x, y|
+    File.size(y) <=> File.size(x)
+  end
 end
 
 def hash_all_files(files)
