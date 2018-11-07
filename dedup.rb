@@ -4,6 +4,8 @@ require 'digest'
 require 'json'
 require 'ruby-progressbar'
 
+IGNORED_DIGESTS = ['da39a3ee5e6b4b0d3255bfef95601890afd80709'].freeze
+
 def get_all_files(base_paths)
   puts 'Generating file list...'
   progress_bar = ProgressBar.create(total: base_paths.size)
@@ -24,8 +26,10 @@ def hash_all_files(files)
 
   files.each_with_index do |file, _i|
     digest = Digest::SHA1.file(file).to_s
-    hashes[digest] = [] unless hashes.key?(digest)
-    hashes[digest] << file
+    unless IGNORED_DIGESTS.include?(digest)
+      hashes[digest] = [] unless hashes.key?(digest)
+      hashes[digest] << file
+    end
     progress_bar.increment
   end
 
