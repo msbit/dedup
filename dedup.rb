@@ -11,7 +11,7 @@ def get_all_files(paths)
   files = {}
 
   puts 'Generating file list...'
-  progress_bar = ProgressBar.create(format: '%t: |%B| %E', total: nil)
+  progress_bar = ProgressBar.create(format: '%t: |%B| %a /%E', total: nil)
 
   Find.find(*paths) do |f|
     begin
@@ -35,7 +35,7 @@ def hash_all_files(files)
   end
 
   puts 'Hashing files...'
-  progress_bar = ProgressBar.create(format: '%t: |%B| %E', total: total)
+  progress_bar = ProgressBar.create(format: '%t: |%B| %a /%E', total: total)
 
   files.each do |entry|
     file, stat = entry
