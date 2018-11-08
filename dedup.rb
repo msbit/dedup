@@ -8,35 +8,36 @@ require 'ruby-progressbar'
 IGNORED_DIGESTS = ['da39a3ee5e6b4b0d3255bfef95601890afd80709'].freeze
 
 def get_all_files(paths)
-  puts 'Generating file list...'
-  progress_bar = ProgressBar.create(total: paths.size)
+  files = {}
 
-  paths.map { |p| File.absolute_path(p) }.map do |path|
-    files = Find.find(path).select { |p| File.file?(p) }
-    progress_bar.increment
-    files
-  end.flatten.uniq.sort do |x, y|
-    File.size(y) <=> File.size(x)
-  end
+  puts 'Generating file list...'
+  Find.find(*paths)
+      .select { |p| File.file?(p) }
+      .uniq
+      .each { |f| files[f] = File.stat(f) }
+
+  files
 end
 
 def hash_all_files(files)
   hashes = {}
 
-  total = files.reduce(0) do |memo, file|
-    memo + File.size(file)
+  total = files.reduce(0) do |memo, entry|
+    _, stat = entry
+    memo + stat.size
   end
 
   puts 'Hashing files...'
   progress_bar = ProgressBar.create(total: total)
 
-  files.each do |file|
+  files.each do |entry|
+    file, stat = entry
     digest = Digest::SHA1.file(file).to_s
     unless IGNORED_DIGESTS.include?(digest)
       hashes[digest] = [] unless hashes.key?(digest)
       hashes[digest] << file
     end
-    progress_bar.progress += File.size(file)
+    progress_bar.progress += stat.size
   end
 
   hashes
@@ -53,7 +54,7 @@ duplicate_hashes = all_hashes.select { |_k, v| v.size > 1 }
 unique_hashes = all_hashes.select { |_k, v| v.size == 1 }
 
 saveable_size = duplicate_hashes.reduce(0) do |memo, value|
-  _digest, files = value
+  _, files = value
   memo + ((files.size - 1) * File.size(files.first))
 end
 
