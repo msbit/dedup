@@ -7,12 +7,12 @@ require 'ruby-progressbar'
 
 IGNORED_DIGESTS = ['da39a3ee5e6b4b0d3255bfef95601890afd80709'].freeze
 
-def get_all_files(base_paths)
+def get_all_files(paths)
   puts 'Generating file list...'
-  progress_bar = ProgressBar.create(total: base_paths.size)
+  progress_bar = ProgressBar.create(total: paths.size)
 
-  base_paths.map { |p| File.absolute_path(p) }.map do |base_path|
-    files = Find.find(base_path).select { |p| File.file?(p) }
+  paths.map { |p| File.absolute_path(p) }.map do |path|
+    files = Find.find(path).select { |p| File.file?(p) }
     progress_bar.increment
     files
   end.flatten.uniq.sort do |x, y|
