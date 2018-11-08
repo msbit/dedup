@@ -67,6 +67,12 @@ end
 
 puts "Could save #{saveable_size} bytes"
 
-File.open("dedup.#{execution_time}.all.json", 'w') { |f| f.write(JSON.pretty_generate(all_hashes)) }
-File.open("dedup.#{execution_time}.duplicate.json", 'w') { |f| f.write(JSON.pretty_generate(duplicate_hashes)) }
-File.open("dedup.#{execution_time}.unique.json", 'w') { |f| f.write(JSON.pretty_generate(unique_hashes)) }
+File.open("dedup.#{execution_time}.all.json", 'w') do |f|
+  f.write(JSON.pretty_generate(all_hashes))
+end
+File.open("dedup.#{execution_time}.duplicate.json", 'w') do |f|
+  f.write(JSON.pretty_generate(duplicate_hashes))
+end
+File.open("dedup.#{execution_time}.unique.json", 'w') do |f|
+  f.write(JSON.pretty_generate(unique_hashes))
+end
