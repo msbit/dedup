@@ -11,10 +11,17 @@ def get_all_files(paths)
   files = {}
 
   puts 'Generating file list...'
-  Find.find(*paths)
-      .select { |p| File.file?(p) }
-      .uniq
-      .each { |f| files[f] = File.stat(f) }
+  progress_bar = ProgressBar.create(format: '%t: |%B| %E', total: nil)
+
+  Find.find(*paths) do |f|
+    begin
+      files[f] = File.stat(f) if File.file?(f)
+    rescue Errno::ENOENT => e
+      puts e
+    end
+    progress_bar.increment
+  end
+  progress_bar.finish
 
   files
 end
