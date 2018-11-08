@@ -45,7 +45,7 @@ def hash_all_files(files)
         hashes[digest] = [] unless hashes.key?(digest)
         hashes[digest] << file
       end
-    rescue Errno::EACCES => e
+    rescue Errno::EACCES, Errno::EINVAL, Errno::EIO, Errno::EPERM => e
       puts e
     end
     progress_bar.progress += stat.size
