@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'digest'
+require 'find'
 require 'json'
 require 'ruby-progressbar'
 
@@ -11,7 +12,7 @@ def get_all_files(base_paths)
   progress_bar = ProgressBar.create(total: base_paths.size)
 
   base_paths.map { |p| File.absolute_path(p) }.map do |base_path|
-    files = Dir.glob("#{base_path}/**/{*,.*}").select { |p| File.file?(p) }
+    files = Find.find(base_path).select { |p| File.file?(p) }
     progress_bar.increment
     files
   end.flatten.uniq.sort do |x, y|
