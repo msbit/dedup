@@ -28,7 +28,7 @@ def hash_all_files(files)
   end
 
   puts 'Hashing files...'
-  progress_bar = ProgressBar.create(total: total)
+  progress_bar = ProgressBar.create(format: '%t: |%B| %E', total: total)
 
   files.each do |entry|
     file, stat = entry
