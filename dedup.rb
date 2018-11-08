@@ -30,7 +30,7 @@ def hash_all_files(files)
   puts 'Hashing files...'
   progress_bar = ProgressBar.create(total: total)
 
-  files.each_with_index do |file, _i|
+  files.each do |file|
     digest = Digest::SHA1.file(file).to_s
     unless IGNORED_DIGESTS.include?(digest)
       hashes[digest] = [] unless hashes.key?(digest)
