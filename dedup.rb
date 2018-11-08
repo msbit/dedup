@@ -39,10 +39,14 @@ def hash_all_files(files)
 
   files.each do |entry|
     file, stat = entry
-    digest = Digest::SHA1.file(file).to_s
-    unless IGNORED_DIGESTS.include?(digest)
-      hashes[digest] = [] unless hashes.key?(digest)
-      hashes[digest] << file
+    begin
+      digest = Digest::SHA1.file(file).to_s
+      unless IGNORED_DIGESTS.include?(digest)
+        hashes[digest] = [] unless hashes.key?(digest)
+        hashes[digest] << file
+      end
+    rescue Errno::EACCES => e
+      puts e
     end
     progress_bar.progress += stat.size
   end
