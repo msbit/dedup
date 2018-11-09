@@ -16,7 +16,7 @@ def get_all_files(paths)
   Find.find(*paths) do |f|
     begin
       files[f] = File.stat(f) if File.file?(f)
-    rescue Errno::ENOENT => e
+    rescue SystemCallError => e
       puts e
     end
     progress_bar.increment
@@ -45,7 +45,7 @@ def hash_all_files(files)
         hashes[digest] = [] unless hashes.key?(digest)
         hashes[digest] << file
       end
-    rescue Errno::EACCES, Errno::EINVAL, Errno::EIO, Errno::EPERM => e
+    rescue SystemCallError => e
       puts e
     end
     progress_bar.progress += stat.size
