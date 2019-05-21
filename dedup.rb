@@ -54,6 +54,13 @@ def hash_files(files)
   hashes
 end
 
+def get_saveable_size(hashes)
+  hashes.reduce(0) do |memo, value|
+    _, files = value
+    memo + ((files.size - 1) * File.size(files.first))
+  end
+end
+
 execution_time = Time.now.to_i
 
 ARGV << '.' if ARGV.empty?
@@ -64,10 +71,7 @@ hashes = hash_files(files)
 duplicate_hashes = hashes.select { |_k, v| v.size > 1 }
 unique_hashes = hashes.select { |_k, v| v.size == 1 }
 
-saveable_size = duplicate_hashes.reduce(0) do |memo, value|
-  _, files = value
-  memo + ((files.size - 1) * File.size(files.first))
-end
+saveable_size = get_saveable_size(duplicate_hashes)
 
 puts "Could save #{saveable_size} bytes"
 
