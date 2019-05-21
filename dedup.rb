@@ -1,9 +1,11 @@
 #!/usr/bin/env ruby
 
+require 'bundler'
+
+Bundler.require(:default)
+
 require 'digest'
 require 'find'
-require 'json'
-require 'ruby-progressbar'
 
 IGNORED_DIGESTS = ['da39a3ee5e6b4b0d3255bfef95601890afd80709'].freeze
 
