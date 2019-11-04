@@ -3,7 +3,7 @@
 
 require 'bundler'
 
-Bundler.require(:default)
+Dir.chdir(__dir__) { Bundler.require(:default) }
 
 require 'digest'
 require 'find'
