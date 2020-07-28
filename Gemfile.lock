@@ -4,7 +4,7 @@ GEM
     ast (2.4.0)
     byebug (11.0.1)
     jaro_winkler (1.5.4)
-    json (2.2.0)
+    json (2.3.0)
     parallel (1.19.1)
     parser (2.7.1.1)
       ast (~> 2.4.0)
@@ -24,7 +24,7 @@ PLATFORMS
 
 DEPENDENCIES
   byebug (~> 11.0.0)
-  json (~> 2.2.0)
+  json (~> 2.3.0)
   rubocop (~> 0.75.0)
   ruby-progressbar (~> 1.10.0)
 

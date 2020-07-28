@@ -5,7 +5,7 @@ source 'https://rubygems.org'
 git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 
 group :default do
-  gem 'json', '~> 2.2.0'
+  gem 'json', '~> 2.3.0'
   gem 'ruby-progressbar', '~> 1.10.0'
 end
 
