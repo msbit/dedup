@@ -10,6 +10,6 @@ group :default do
 end
 
 group :development do
-  gem 'byebug', '~> 11.0.0'
+  gem 'byebug', '~> 11.1.0'
   gem 'rubocop', '~> 0.75.0'
 end
