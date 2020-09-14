@@ -11,5 +11,5 @@ end
 
 group :development do
   gem 'byebug', '~> 11.0.0'
-  gem 'rubocop', '~> 0.75.0'
+  gem 'rubocop', '~> 0.90.0'
 end
