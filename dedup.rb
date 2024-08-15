@@ -18,7 +18,13 @@ def get_files(paths)
 
   Find.find(*paths) do |f|
     begin
-      files[f] = File.stat(f) if File.file?(f)
+      if File.file?(f)
+        st = File.stat(f)
+        files[st.ino] = {
+          name: f,
+          stat: st
+        }
+      end
     rescue SystemCallError => e
       puts e
     end
@@ -32,26 +38,24 @@ end
 def hash_files(files)
   hashes = {}
 
-  total = files.reduce(0) do |memo, entry|
-    _, stat = entry
-    memo + stat.size
+  total = files.reduce(0) do |memo, (_, entry)|
+    memo + entry[:stat].size
   end
 
   puts 'Hashing files...'
   progress_bar = ProgressBar.create(format: '%t: |%B| %a /%E', total: total)
 
-  files.each do |entry|
-    file, stat = entry
+  files.each do |_, entry|
     begin
-      digest = Digest::SHA1.file(file).to_s
+      digest = Digest::SHA1.file(entry[:name]).to_s
       unless IGNORED_DIGESTS.include?(digest)
         hashes[digest] = [] unless hashes.key?(digest)
-        hashes[digest] << file
+        hashes[digest] << entry[:name]
       end
     rescue SystemCallError => e
       puts e
     end
-    progress_bar.progress += stat.size
+    progress_bar.progress += entry[:stat].size
   end
 
   hashes
